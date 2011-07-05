@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  before_filter :authenticate_user!, :except => [:show, :index]
   # GET /posts
   # GET /posts.xml
   def index
@@ -33,7 +34,7 @@ class PostsController < ApplicationController
   # GET /posts/1/edit
   def edit
     @board = Board.find(params[:board_id])
-    @post = @board.posts.find(params[:id])
+    @post = current_user.posts.find(params[:id])
   end
 
   # POST /posts
@@ -41,6 +42,8 @@ class PostsController < ApplicationController
   def create
     @board = Board.find(params[:board_id])
     @post = @board.posts.build(params[:post])
+    @post.user_id = current_user.id
+
     respond_to do |format|
       if @post.save
         format.html { redirect_to (board_posts_path(@board, :notice =>'Post was successfully updated'))}
@@ -56,7 +59,7 @@ class PostsController < ApplicationController
   # PUT /posts/1.xml
   def update
     @board = Board.find(params[:board_id])
-    @post = @board.posts.find(params[:id])
+    @post = current_user.posts.find(params[:id])
 
     respond_to do |format|
       if @post.update_attributes(params[:post])
@@ -73,7 +76,7 @@ class PostsController < ApplicationController
   # DELETE /posts/1.xml
   def destroy
     @board = Board.find(params[:board_id])
-    @post = @board.posts.find(params[:id])
+    @post = current_user.posts.find(params[:id])
     @post.destroy
 
     respond_to do |format|
