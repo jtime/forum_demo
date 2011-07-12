@@ -37,4 +37,12 @@ class Admin::PostsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  protected
+  def find_board
+    @board = Board.find(params[:board_id])
+  end
+
+
+
 end
