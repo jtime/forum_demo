@@ -11,7 +11,6 @@ class Admin::PostsController < ApplicationController
   # PUT /posts/1
   # PUT /posts/1.xml
   def update
-    @board = Board.find(params[:board_id])
     @post = Post.find(params[:id])
 
     respond_to do |format|
@@ -28,7 +27,6 @@ class Admin::PostsController < ApplicationController
   # DELETE /posts/1
   # DELETE /posts/1.xml
   def destroy
-    @board = Board.find(params[:board_id])
     @post = Post.find(params[:id])
     @post.destroy
 
