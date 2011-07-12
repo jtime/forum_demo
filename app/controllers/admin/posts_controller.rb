@@ -1,67 +1,18 @@
 class Admin::PostsController < ApplicationController
   layout 'admin'
-  before_filter :require_is_admin
-  before_filter :authenticate_user!, :except => [:show, :index]
-  # GET /posts
-  # GET /posts.xml
-  def index
-    @board = Board.find(params[:board_id])
-    redirect_to board_path(@board)
-  end
+  before_filter :find_board
 
-  # GET /posts/1
-  # GET /posts/1.xml
-  def show
-    @board = Board.find(params[:board_id])
-    @post = @board.posts.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @post }
-    end
-  end
-
-  # GET /posts/new
-  # GET /posts/new.xml
-  def new
-    @board = Board.find(params[:board_id])
-    @post = @board.posts.build
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @post }
-    end
-  end
-
+  before_filter :authenticate_user!, :except =>[:index]
   # GET /posts/1/edit
   def edit
-    @board = Board.find(params[:board_id])
-    @post = current_user.posts.find(params[:id])
-  end
-
-  # POST /posts
-  # POST /posts.xml
-  def create
-    @board = Board.find(params[:board_id])
-    @post = @board.posts.build(params[:post])
-    @post.user_id = current_user.id
-
-    respond_to do |format|
-      if @post.save
-        format.html { redirect_to (board_posts_path(@board, :notice =>'Post was successfully updated'))}
-        format.xml  { render :xml => @post, :status => :created, :location => @post }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @post.errors, :status => :unprocessable_entity }
-      end
-    end
+    @post = Post.find(params[:id])
   end
 
   # PUT /posts/1
   # PUT /posts/1.xml
   def update
     @board = Board.find(params[:board_id])
-    @post = current_user.posts.find(params[:id])
+    @post = Post.find(params[:id])
 
     respond_to do |format|
       if @post.update_attributes(params[:post])
@@ -78,7 +29,7 @@ class Admin::PostsController < ApplicationController
   # DELETE /posts/1.xml
   def destroy
     @board = Board.find(params[:board_id])
-    @post = current_user.posts.find(params[:id])
+    @post = Post.find(params[:id])
     @post.destroy
 
     respond_to do |format|

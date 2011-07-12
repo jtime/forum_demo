@@ -2,8 +2,7 @@ ForumDemo::Application.routes.draw do
   devise_for :users
 
   resources :boards do
-
-  resources :posts
+   resources :posts
   end
 
   namespace :admin do
